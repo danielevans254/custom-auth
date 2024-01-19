@@ -15,7 +15,7 @@ export const LoginButton = ({
 
   const router = useRouter();
 
-  const handleClick = () => {
+  const handleNavigate = () => {
     router.push("/login")
   }
 
@@ -26,7 +26,7 @@ export const LoginButton = ({
   }
 
   return (
-    <span onClick={handleClick} className="cursor-pointer">
+    <span onClick={handleNavigate} className="cursor-pointer">
       {children}
     </span>
   )
