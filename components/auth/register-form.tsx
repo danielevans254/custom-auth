@@ -57,25 +57,7 @@ const RegisterForm = ({
             className="space-y-6"
           >
             <div className="space-y-4">
-
               <>
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="john.doe@example.com"
-                          type="email"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <FormField
                   control={form.control}
                   name="name"
@@ -87,6 +69,23 @@ const RegisterForm = ({
                           {...field}
                           placeholder="John Doe"
                           type="text"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="john.doe@example.com"
+                          type="email"
                         />
                       </FormControl>
                       <FormMessage />
@@ -116,7 +115,6 @@ const RegisterForm = ({
             <FormError message={""} />
             <FormSuccess message={""} />
             <Button type="submit" className="w-full bg-indigo-800/90 shadow-xl hover:bg-indigo-900">Register</Button>
-
           </form>
 
         </Form>

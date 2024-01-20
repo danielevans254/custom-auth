@@ -18,6 +18,7 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { FormError } from "../form-error"
 import { FormSuccess } from "../form-sucess"
+import { Separator } from "@radix-ui/react-separator"
 export const LoginForm = () => {
 
   const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
@@ -38,7 +39,7 @@ export const LoginForm = () => {
     <CardWrapper
       headerLabel="Welcome back"
       backButtonLabel="Don't have an account?"
-      backButtonHref="register"
+      backButtonHref="/register"
       showSocial
     >
       <Form {...form}>
@@ -84,14 +85,16 @@ export const LoginForm = () => {
                 )}
               />
             </>
-
           </div>
           <FormError message={""} />
           <FormSuccess message={""} />
           <Button type="submit" className="w-full bg-indigo-800/90 shadow-xl hover:bg-indigo-900">Login</Button>
+          <div className="flex flex-col items-center justify-center pt-1">
+            <Separator orientation="horizontal" className="absolute w-80 border-t-2" />
+            <span className="text-gray-600 px-6 z-10 bg-white">OR</span>
+          </div>
         </form>
       </Form>
     </CardWrapper>
-
   )
 }
