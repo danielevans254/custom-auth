@@ -4,7 +4,7 @@ import { CardWrapper } from "./card-wrapper"
 import * as z from "zod"
 import { RegisterSchema } from "@/schemas"
 import { zodResolver } from '@hookform/resolvers/zod';
-
+import { useState, useTransition } from "react"
 import {
   Form,
   FormControl,
@@ -41,15 +41,27 @@ const RegisterForm = ({
     },
   })
 
+  const [isPending, startTransition] = useTransition()
+
+  const [error, setError] = useState<string | undefined>("")
+  const [success, setSuccess] = useState<string | undefined>("")
+
   const handleSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    register(values)
-    console.log(values)
+    setError("")
+    setSuccess("")
+    startTransition(() => {
+      register(values)
+        .then((data) => {
+          setError(data.error)
+          setSuccess(data.success)
+        })
+    })
   }
 
   return (
     <div>
       <CardWrapper
-        headerLabel="Welcome back"
+        headerLabel="Create an Account"
         backButtonLabel="Already have an account?"
         backButtonHref="login"
         showSocial
@@ -69,6 +81,7 @@ const RegisterForm = ({
                       <FormLabel>Name</FormLabel>
                       <FormControl>
                         <Input
+                          disabled={isPending}
                           {...field}
                           placeholder="John Doe"
                           type="text"
@@ -86,6 +99,7 @@ const RegisterForm = ({
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
+                          disabled={isPending}
                           {...field}
                           placeholder="john.doe@example.com"
                           type="email"
@@ -103,6 +117,7 @@ const RegisterForm = ({
                       <FormLabel>Password</FormLabel>
                       <FormControl>
                         <Input
+                          disabled={isPending}
                           {...field}
                           placeholder="********"
                           type="password"
@@ -115,9 +130,10 @@ const RegisterForm = ({
               </>
 
             </div>
-            <FormError message={""} />
-            <FormSuccess message={""} />
-            <Button type="submit" className="w-full bg-indigo-800/90 shadow-xl hover:bg-indigo-900">Register</Button>
+            <FormError message={error} />
+            <FormSuccess message={success} />
+            <Button disabled={isPending}
+              type="submit" className="w-full bg-indigo-800/90 shadow-xl hover:bg-indigo-900">Register</Button>
           </form>
 
         </Form>
