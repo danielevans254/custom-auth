@@ -4,7 +4,8 @@ import { CardWrapper } from "./card-wrapper"
 import * as z from "zod"
 import { LoginSchema } from "@/schemas"
 import { zodResolver } from '@hookform/resolvers/zod';
-
+import { login } from "@/actions/login"
+import { useTransition } from "react"
 import {
   Form,
   FormControl,
@@ -21,8 +22,10 @@ import { FormSuccess } from "../form-sucess"
 import { Separator } from "@radix-ui/react-separator"
 export const LoginForm = () => {
 
+  const [isPending, startTransition] = useTransition();
+
   const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log(values)
+    login(values)
   }
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -89,7 +92,7 @@ export const LoginForm = () => {
           <FormError message={""} />
           <FormSuccess message={""} />
           <Button type="submit" className="w-full bg-indigo-800/90 shadow-xl hover:bg-indigo-900">Login</Button>
-          <div className="flex flex-col items-center justify-center pt-1">
+          <div className="flex flex-col items-center justify-center pt-0">
             <Separator orientation="horizontal" className="absolute w-80 border-t-2" />
             <span className="text-gray-600 px-6 z-10 bg-white">OR</span>
           </div>

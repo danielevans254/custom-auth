@@ -18,6 +18,7 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { FormError } from "../form-error"
 import { FormSuccess } from "../form-sucess"
+import { register } from "@/actions/register"
 
 interface RegisterFormProps {
   children: string,
@@ -40,6 +41,7 @@ const RegisterForm = ({
   })
 
   const handleSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    register(values)
     console.log(values)
   }
 
