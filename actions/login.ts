@@ -1,19 +1,15 @@
 'use server'
 
-import { NextResponse } from "next/server"
+import { LoginSchema } from "@/schemas"
+import * as z from "zod"
 
 // TODO: Testing for now
-export const login = (values: any) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (values.email === 'admin@gmail.com' && values.password === 'admin') {
-        console.log(values)
-        resolve(true)
-        console.log('Login success')
-      } else {
-        reject(new Error('Login failed'))
-      }
-    }, 1000)
-  })
-}
+export const login = async (values: z.infer<typeof LoginSchema>) => {
+  const validateFields = LoginSchema.safeParse(values)
 
+  if (!validateFields.success) {
+    return { error: "Invalid fields!" }
+  }
+
+  return { success: "Email Sent!" }
+};
