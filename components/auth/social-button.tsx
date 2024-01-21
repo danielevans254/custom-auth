@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const SocialButton = () => {
-  const buttonClassName = cn("flex items-center justify-center w-full gap-x-2 mx-auto text-center");
+  const buttonClassName = cn("flex items-center justify-center w-full gap-x-2 mx-auto text-center border-2 border-gray-400 hover:bg-slate-300");
 
   const handleClick = () => {
     console.log("Clicked");
