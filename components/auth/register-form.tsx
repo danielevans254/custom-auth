@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form"
 import { CardWrapper } from "./card-wrapper"
 import * as z from "zod"
-import { LoginSchema, RegisterSchema } from "@/schemas"
+import { RegisterSchema } from "@/schemas"
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
@@ -12,8 +12,8 @@ import {
   FormMessage,
   FormItem,
   FormField,
-
 } from "@/components/ui/form"
+
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { FormError } from "../form-error"
@@ -25,6 +25,7 @@ interface RegisterFormProps {
   mode?: "modal" | "redirect";
   asChild?: boolean;
 }
+
 const RegisterForm = ({
   children,
   mode = "redirect",
