@@ -1,43 +1,35 @@
 /**
- * An array of routes that can be accessed by logged out users
+ * An array of routes that are accessible to the public
+ * These routes do not require authentication
  * @type {string[]}
  */
 export const publicRoutes: string[] = [
-  "/settings"
-]
+  "/",
+  "/new-verification"
+];
 
 /**
- * An array of routes that can only accessed by logged in users
- * @type {string[]}
-*/
-export const privateRoutes: string[] = [
-  "/about"
-]
-
-/**
- * An array of routes for authentication
+ * An array of routes that are used for authentication
+ * These routes will redirect logged in users to /settings
  * @type {string[]}
  */
 export const authRoutes: string[] = [
   "/login",
-  "/register"
-]
+  "/register",
+  "/error",
+  "/reset",
+  "/new-password"
+];
 
 /**
- * Prefix for API Auth routes
+ * The prefix for API authentication routes
+ * Routes that start with this prefix are used for API authentication purposes
  * @type {string}
  */
-export const apiApiPrefix: string = "/api/auth"
+export const apiAuthPrefix: string = "/api/auth";
 
 /**
- * This will be where signed in users will be redirected
+ * The default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT: string = "/"
-
-/**
- * This will be where signed in users will be redirected
- * @type {string}
- */
-// TODO: Create the onboarding page
-export const DEFAULT_REGISTER_REDIRECT: string = "/onboard"
+export const DEFAULT_LOGIN_REDIRECT: string = "/settings";

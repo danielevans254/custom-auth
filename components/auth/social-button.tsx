@@ -22,14 +22,15 @@ const SocialButton = () => {
         <FaGithub className="text-xl" />
         <span>Github</span>
       </Button>
-      <Button variant="secondary" size="sm" className={buttonClassName}>
+      {/* NOTE: Im not really familiar with the facebook and twitter provider for */}
+      {/* <Button variant="secondary" size="sm" className={buttonClassName}>
         <SiFacebook className="text-xl" />
         <span>Facebook</span>
       </Button>
       <Button variant="secondary" size="sm" className={buttonClassName}>
         <SiTwitter className="text-xl bg-bl" />
         <span>Twitter</span>
-      </Button>
+      </Button> */}
     </div>
   );
 }

@@ -9,17 +9,9 @@ import { FaSignInAlt } from "react-icons/fa";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["600"] });
 
+// THIS WILL BE THE HOME PAGE, YOU CAN call the sign in and register button here, to redirect to the login or register page
+// TODO: If there is a session make sure to redirect to the default login redirect
 export default function Home() {
-
-  const handleSignIn = () => {
-    console.log("Sign In");
-  }
-
-  const handleRegister = () => {
-    console.log("Register");
-  }
-
-
 
   return (
     // Nice Gradient: https://uigradients.com/#RoseWater
@@ -27,22 +19,21 @@ export default function Home() {
       <div className="p-12 space-y-6 text-center h-3/5 ">
         <div className="flex flex-col items-center justify-center">
           <div className="text-5xl mb-4">
-            <span>🔐</span>
           </div>
           <h1 className={cn("text-5xl font-bold text-white drop-shadow-xl", poppins.className)}>
-            Auth Page
+            {process.env.NEXT_PUBLIC_APP_NAME}
           </h1>
           <div className="text-center flex  flex-col items-center justify-center mt-8 space-y-4">
-            <LoginButton>
-              <Button onClick={handleSignIn} variant="secondary" size="lg" className="w-36">
+            <LoginButton asChild>
+              <Button variant="secondary" size="lg" className="w-36">
                 <span className="left-0 mr-2">
                   <FaSignInAlt className="w-4 h-4" />
                 </span>
                 Sign In
               </Button>
             </LoginButton>
-            <RegisterButton>
-              <Button onClick={handleRegister} variant="secondary" size="lg" className="w-36">
+            <RegisterButton asChild>
+              <Button variant="secondary" size="lg" className="w-36">
                 <span className="left-0 mr-2">
                   <FaSignInAlt className="w-4 h-4" />
                 </span>

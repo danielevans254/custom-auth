@@ -19,26 +19,27 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { FormError } from "../form-error"
 import { FormSuccess } from "../form-success"
-import { Separator } from "@radix-ui/react-separator"
-export const LoginForm = () => {
+import { CircularProgress } from "@mui/material";
 
+export const LoginForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [isPending, startTransition] = useTransition();
-
-  const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
-    setError("")
-    setSuccess("")
-    startTransition(() => {
-      login(values)
-        .then((data) => {
-          setError(data.error)
-          setSuccess(data.success)
-        })
-    })
-
-  }
+  const handleSubmit = async (values: z.infer<typeof LoginSchema>) => {
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
+    try {
+      const data = await login(values);
+      setError(data?.error);
+      setSuccess(data?.success);
+    } catch (error) {
+      setError("An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -49,7 +50,6 @@ export const LoginForm = () => {
   })
 
   // FIXME: Form errors not showing
-
   return (
     <CardWrapper
       headerLabel="Welcome back"
@@ -72,7 +72,7 @@ export const LoginForm = () => {
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
-                        disabled={isPending}
+                        disabled={isLoading}
                         {...field}
                         placeholder="john.doe@example.com"
                         type="email"
@@ -90,7 +90,7 @@ export const LoginForm = () => {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
-                        disabled={isPending}
+                        disabled={isLoading}
                         {...field}
                         placeholder="********"
                         type="password"
@@ -104,14 +104,26 @@ export const LoginForm = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button disabled={isPending}
-            type="submit" className="w-full bg-indigo-800/90 shadow-xl hover:bg-indigo-900">Login</Button>
+          <Button
+            disabled={isLoading}
+            type="submit"
+            className={`w-full bg-indigo-800/90 shadow-xl hover:bg-indigo-900 ${isLoading ? "cursor-no-drop" : ""
+              }`}
+          >
+            {isLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Log in"
+            )}
+          </Button>
           <div className="flex flex-col items-center justify-center pt-0">
-            <Separator orientation="horizontal" className="absolute w-80 border-t-2" />
-            <span className="text-gray-600 px-6 z-10 bg-white">OR</span>
+            <span className="text-sm font-medium text-gray-900">
+              or continue with the following
+            </span>
           </div>
         </form>
       </Form>
     </CardWrapper>
-  )
+  );
 }
+
