@@ -1,6 +1,5 @@
 import authConfig from "./auth.config"
 import NextAuth from "next-auth"
-export const { auth: middleware } = NextAuth(authConfig)
 
 import {
   DEFAULT_LOGIN_REDIRECT,
@@ -10,8 +9,10 @@ import {
 } from "@/routes"
 
 const { auth } = NextAuth(authConfig)
-// FIXME: TF is the meaning of this? "No overload matches this call"
-export default auth((req: NextAuthRequest) => {
+// NOTE: This fucking import was causing the problem, TF!
+// export const { auth: middleware } = NextAuth(authConfig)
+
+export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
@@ -22,12 +23,14 @@ export default auth((req: NextAuthRequest) => {
   if (isApiAuthPrefixRoute) {
     return null;
   }
+
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl.toString()));
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl.toString()))
     }
-    return null
+    return null;
   }
+
   if (!isLoggedIn && !isPublicRoute) {
     return Response.redirect(new URL("/login", nextUrl.toString()));
   }
