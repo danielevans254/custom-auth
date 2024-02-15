@@ -139,7 +139,7 @@ const RegisterForm = ({
           <Button
             disabled={isLoading}
             type="submit"
-            className={`w-full bg-indigo-800/90 shadow-xl hover:bg-indigo-900 ${isLoading ? "cursor-no-drop" : ""
+            className={`w-full bg-indigo-800/90 shadow-xl hover:bg-indigo-900 ${isLoading ? "cursor-not-allowed	" : ""
               }`}
           >
             {isLoading ? (
