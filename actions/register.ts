@@ -32,7 +32,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   await db.user.create({
     data: {
       name,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword
     }
   })
@@ -40,6 +40,6 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   // TODO: Send Verification Email
 
   return {
-    success: `Welcome Aboard!`
+    success: `Please verify your email to continue.`
   }
 }

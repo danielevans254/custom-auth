@@ -7,6 +7,7 @@ import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
 export default {
+
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -26,14 +27,13 @@ export default {
           if (!user || !user.password) {
             return null;
           }
-
-          const saltedPassword = password + email;
+          // Convert email to lowercase because the email is stored in lowercase, and the password is salted with the email.
+          const saltedPassword = password + email.toLowerCase();
           const hashedPassword = CryptoJS.SHA256(saltedPassword).toString();
 
           if (hashedPassword === user.password) {
             return user;
           }
-
           return null;
         }
       },
