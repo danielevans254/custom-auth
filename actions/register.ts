@@ -27,12 +27,11 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Email is already taken" }
   }
 
-  const hashedPassword = hashWithSalt(password, email)
-  console.log(hashedPassword)
+  const hashedPassword = hashWithSalt(password, email.toLowerCase())
   await db.user.create({
     data: {
       name,
-      email: email.toLowerCase(),
+      email,
       password: hashedPassword
     }
   })
