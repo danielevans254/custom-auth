@@ -13,14 +13,14 @@ import {
   FormMessage,
   FormItem,
   FormField,
-
 } from "@/components/ui/form"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { FormError } from "../form-error"
 import { FormSuccess } from "../form-success"
-import { CircularProgress } from "@mui/material";
+import Loader from "./loader"
 
+// FIXME: I would rather want to use the error thrown from the callback on the form error message
 export const LoginForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -57,10 +57,10 @@ export const LoginForm = () => {
       backButtonHref="/register"
       showSocial
     >
-      <Form {...form}>
+      <Form {...form} >
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="space-y-6"
+          className="space-y-6 "
         >
           <div className="space-y-4">
             <>
@@ -72,6 +72,7 @@ export const LoginForm = () => {
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
+                        className="w-full border border-gray-700"
                         disabled={isLoading}
                         {...field}
                         placeholder="john.doe@example.com"
@@ -90,6 +91,7 @@ export const LoginForm = () => {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
+                        className="w-full border border-gray-700"
                         disabled={isLoading}
                         {...field}
                         placeholder="********"
@@ -111,7 +113,7 @@ export const LoginForm = () => {
               }`}
           >
             {isLoading ? (
-              <CircularProgress size={24} color="inherit" />
+              <Loader />
             ) : (
               "Log in"
             )}
