@@ -9,28 +9,28 @@ import { cn } from "@/lib/utils";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { CircularProgress } from "@mui/material";
+import Loader from "@/components/auth/loader";
 
-interface SocialButtonProps {
-  providerIsLoading: boolean;
-}
-
-const SocialButton = ({ providerIsLoading }: SocialButtonProps) => {
+// TODO: Make the loader a reusable component
+const SocialButton = () => {
   const buttonClassName = cn("flex items-center justify-center w-full gap-x-2 mx-auto text-center border-2 border-gray-400 hover:bg-slate-300");
+  // TODO: Change the loading to a spinner
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 
   const [isGithubLoading, setIsGithubLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-
+  const [isDisabled, setIsDisabled] = useState(false);
   const handleClick = async (provider: "google" | "github") => {
     if (provider === "google") {
       setIsGoogleLoading(true);
       setIsGithubLoading(false);
+      setIsDisabled(true);
     }
     if (provider === "github") {
       setIsGithubLoading(true);
       setIsGoogleLoading(false);
+      setIsDisabled(true);
     }
     await signIn(provider, {
       callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
@@ -39,9 +39,9 @@ const SocialButton = ({ providerIsLoading }: SocialButtonProps) => {
 
   return (
     <div className="grid grid-cols-2 items-center w-full gap-2">
-      <Button variant="secondary" size="sm" className={buttonClassName} onClick={() => handleClick("google")} disabled={isGithubLoading || providerIsLoading}>
+      <Button variant="secondary" size="sm" className={buttonClassName} onClick={() => handleClick("google")} disabled={isDisabled}>
         {isGoogleLoading ? (
-          <CircularProgress size={20} color="inherit" />
+          <Loader />
         ) : (
           <>
             <FcGoogle className="text-xl" />
@@ -49,9 +49,9 @@ const SocialButton = ({ providerIsLoading }: SocialButtonProps) => {
           </>
         )}
       </Button>
-      <Button variant="secondary" size="sm" className={buttonClassName} onClick={() => handleClick("github")} disabled={isGoogleLoading || providerIsLoading}>
+      <Button variant="secondary" size="sm" className={buttonClassName} onClick={() => handleClick("github")} disabled={isDisabled}>
         {isGithubLoading ? (
-          <CircularProgress size={20} color="inherit" />
+          <Loader />
         ) : (
           <>
             <FaGithub className="text-xl" />
