@@ -19,8 +19,7 @@ import { Button } from "../ui/button"
 import { FormError } from "../form-error"
 import { FormSuccess } from "../form-success"
 import { register } from "@/actions/register"
-import { CircularProgress } from "@mui/material";
-
+import Loader from "./loader"
 interface RegisterFormProps {
   children: string,
   mode?: "modal" | "redirect";
@@ -46,6 +45,7 @@ const RegisterForm = ({
 
   const [error, setError] = useState<string | undefined>("")
   const [success, setSuccess] = useState<string | undefined>("")
+  const [clearForm, setClearForm] = useState(false)
 
   const handleSubmit = async (values: z.infer<typeof RegisterSchema>) => {
     setIsLoading(true);
@@ -55,12 +55,18 @@ const RegisterForm = ({
       const data = await register(values);
       setError(data?.error);
       setSuccess(data?.success);
+      setClearForm(true);
     } catch (error) {
       setError("An error occurred");
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (clearForm) {
+    form.reset();
+    setClearForm(false);
+  }
 
   return (
 
@@ -85,6 +91,7 @@ const RegisterForm = ({
                     <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input
+                        className="border border-gray-700"
                         disabled={isLoading}
                         {...field}
                         placeholder="John Doe"
@@ -103,6 +110,7 @@ const RegisterForm = ({
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
+                        className="border border-gray-700"
                         disabled={isLoading}
                         {...field}
                         placeholder="john.doe@example.com"
@@ -121,6 +129,7 @@ const RegisterForm = ({
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
+                        className="border border-gray-700"
                         disabled={isLoading}
                         {...field}
                         placeholder="********"
@@ -143,7 +152,7 @@ const RegisterForm = ({
               }`}
           >
             {isLoading ? (
-              <CircularProgress size={24} color="inherit" />
+              <Loader />
             ) : (
               "Register"
             )}
