@@ -15,10 +15,10 @@ const BackButton = ({
   return (
     <Button asChild className="w-full hover:text-blue-600" variant={"ghost"}>
       <Link href={href}>
-        <span className="text-xs">{label}</span>
+        <span className="text-xs text-blue-600 underline">{label}</span>
       </Link>
     </Button>
   );
 }
 
-export default BackButton; 
+export default BackButton;
