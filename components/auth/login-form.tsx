@@ -19,13 +19,15 @@ import { Button } from "../ui/button"
 import { FormError } from "../form-error"
 import { FormSuccess } from "../form-success"
 import Loader from "./loader"
+import { useSearchParams } from "next/navigation"
 
 // FIXME: I would rather want to use the error thrown from the callback on the form error message
 export const LoginForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const searchParams = useSearchParams();
+  const OAuthAccountNotLinkedErrorUrl = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email in use with different provider" : "";
   const handleSubmit = async (values: z.infer<typeof LoginSchema>) => {
     setIsLoading(true);
     setError("");
@@ -104,7 +106,7 @@ export const LoginForm = () => {
               />
             </>
           </div>
-          <FormError message={error} />
+          <FormError message={error || OAuthAccountNotLinkedErrorUrl} />
           <FormSuccess message={success} />
           <Button
             disabled={isLoading}

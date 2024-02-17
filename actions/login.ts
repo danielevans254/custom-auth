@@ -31,7 +31,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         case "InvalidProvider":
           return { error: "Invalid provider!" }
         case "OAuthCallbackError":
-          return { error: "OAuthCallbackError error!" }
+          return { error: "OAuthCallbackError occurred!" }
+        case "OAuthAccountNotLinked":
+          return { error: "Email in use already with a different provider" }
         // TODO: Im not sure what other errors this gets triggered on the callback, but for now. I know if the signin callback returns false, it will throw this error
         default:
           return { error: "An error occurred!" }
