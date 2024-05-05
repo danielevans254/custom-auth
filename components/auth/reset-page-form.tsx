@@ -2,9 +2,9 @@
 import { useForm } from "react-hook-form"
 import { CardWrapper } from "./card-wrapper"
 import * as z from "zod"
-import { LoginSchema } from "@/schemas"
+import { ResetPasswordSchema } from "@/schemas"
 import { zodResolver } from '@hookform/resolvers/zod';
-import { login } from "@/actions/login"
+import { resetPassword } from "@/actions/reset-password"
 import { useState } from "react"
 import {
   Form,
@@ -13,29 +13,28 @@ import {
   FormMessage,
   FormItem,
   FormField,
+  FormDescription,
 } from "@/components/ui/form"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { FormError } from "../form-error"
 import { FormSuccess } from "../form-success"
 import Loader from "./loader"
-import { useSearchParams } from "next/navigation"
-import Link from "next/link"
 
 // FIXME: I would rather want to use the error thrown from the callback on the form error message
-export const LoginForm = () => {
+export const ResetPageForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isLoading, setIsLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const OAuthAccountNotLinkedErrorUrl = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email in use with different provider" : "";
 
-  const handleSubmit = async (values: z.infer<typeof LoginSchema>) => {
+
+  const handleSubmit = async (values: z.infer<typeof ResetPasswordSchema>) => {
     setIsLoading(true);
     setError("");
     setSuccess("");
+    await resetPassword(values)
     try {
-      const data = await login(values);
+      const data = await resetPassword(values);
       setError(data?.error);
       setSuccess(data?.success);
     } catch (error) {
@@ -45,21 +44,19 @@ export const LoginForm = () => {
     }
   };
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof ResetPasswordSchema>>({
+    resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   })
 
   // FIXME: Form errors not showing
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      backButtonLabel="Don't have an account?"
-      backButtonHref="/register"
-      showSocial
+      headerLabel="Forgot your password?"
+      backButtonLabel="Back to login"
+      backButtonHref="/login"
     >
       <Form {...form} >
         <form
@@ -87,33 +84,9 @@ export const LoginForm = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-full border border-gray-700"
-                        disabled={isLoading}
-                        {...field}
-                        placeholder="********"
-                        type="password"
-                      />
-                    </FormControl>
-                    <Button variant="link" className="text-sm" size="sm" asChild>
-                      <Link href="/reset-password">
-                        Forgot password?
-                      </Link>
-                    </Button>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </>
           </div>
-          <FormError message={error || OAuthAccountNotLinkedErrorUrl} />
+          <FormError message={error} />
           <FormSuccess message={success} />
           <Button
             disabled={isLoading}
@@ -124,7 +97,7 @@ export const LoginForm = () => {
             {isLoading ? (
               <Loader />
             ) : (
-              "Log in"
+              "Send reset link"
             )}
           </Button>
         </form>

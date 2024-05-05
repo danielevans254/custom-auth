@@ -157,11 +157,6 @@ const RegisterForm = ({
               "Register"
             )}
           </Button>
-          <div className="flex flex-col items-center justify-center pt-0">
-            <span className="text-sm font-medium text-gray-900">
-              or continue with the following
-            </span>
-          </div>
         </form>
       </Form>
     </CardWrapper>
