@@ -5,15 +5,47 @@ import * as z from "zod"
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
+import { generateVerificationToken } from "@/lib/tokens";
+import { getUserByEmail } from "@/data/user";
+import { sendVerificationEmail } from "@/lib/mail";
 // TODO: Testing for now
+// TODO: If the user somehow manages to not click the link for the verification email and it expires 1 hour, we should have a way to resend the verification email
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validateFields = LoginSchema.safeParse(values)
 
   if (!validateFields.success) {
     return { error: "Invalid fields!" }
   }
-
   const { email, password } = validateFields.data;
+
+  const existingUser = await getUserByEmail(email)
+
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return { error: "Email not found!" }
+  }
+
+  if (!existingUser?.emailVerified) {
+    const verificationToken = await generateVerificationToken(existingUser.email)
+    console.log(verificationToken, "Verification Token")
+
+    const timer = setTimeout(() => {
+      console.log('This is taking longer than expected...');
+      return { error: "This is taking longer than expected..." }
+    }, 5000);
+
+    try {
+      await sendVerificationEmail(verificationToken.email, verificationToken.token)
+      clearTimeout(timer);
+    } catch (error) {
+      // If there's an error in sending the email, clear the timer
+      clearTimeout(timer);
+      console.error(error);
+    }
+    return {
+      error: `Please verify your email!`
+    }
+  }
+
   try {
     await signIn("credentials", {
       email: email.toLowerCase(),

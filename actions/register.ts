@@ -4,14 +4,11 @@ import * as z from "zod"
 import { createHash } from "crypto"
 import { db } from "@/utils/db"
 import { getUserByEmail } from "@/data/user"
-
+import { generateVerificationToken } from "@/lib/tokens"
+import { sendVerificationEmail } from '@/lib/mail';
+import { hashWithSalt } from '@/lib/password-hash';
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
 
-  const hashWithSalt = (password: string, salt: string): string => {
-    const hash = createHash("sha256")
-    hash.update(password + salt)
-    return hash.digest("hex")
-  }
 
   const validatedFields = RegisterSchema.safeParse(values)
 
@@ -27,7 +24,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Email is already taken" }
   }
 
-  const hashedPassword = hashWithSalt(password, email.toLowerCase())
+  const hashedPassword = hashWithSalt(password, email)
   await db.user.create({
     data: {
       name,
@@ -36,9 +33,12 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     }
   })
 
+  const verificationToken = await generateVerificationToken(email)
+
   // TODO: Send Verification Email
+  await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
   return {
-    success: `Please verify your email to continue.`
+    success: `Verification email sent.`
   }
 }
