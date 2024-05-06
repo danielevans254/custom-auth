@@ -21,6 +21,8 @@ import { FormSuccess } from "../form-success"
 import Loader from "./loader"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { Checkbox } from "@/components/ui/checkbox"
+
 
 // FIXME: I would rather want to use the error thrown from the callback on the form error message
 export const LoginForm = () => {
@@ -102,12 +104,25 @@ export const LoginForm = () => {
                         type="password"
                       />
                     </FormControl>
-                    <Button variant="link" className="text-sm" size="sm" asChild>
-                      <Link href="/reset-password">
-                        Forgot password?
-                      </Link>
-                    </Button>
                     <FormMessage />
+                    <div className="flex justify-between items-center">
+                      {/* TODO: Implement the remember me, this will just increase the session length till it expires default is already 30 days, i'll change it to 1 hour */}
+                      {/* TODO: Add a state to check if the checkbox is ticked */}
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="terms" />
+                        <label
+                          htmlFor="terms"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Remember me ?
+                        </label>
+                      </div>
+                      <Button variant="link" className="text-sm" size="sm" asChild>
+                        <Link href="/reset-password">
+                          Forgot password?
+                        </Link>
+                      </Button>
+                    </div>
                   </FormItem>
                 )}
               />
