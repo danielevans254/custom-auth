@@ -5,6 +5,7 @@ import CryptoJS from "crypto-js"
 import { getUserByEmail } from "@/data/user"
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+import { hashWithSalt } from '@/lib/password-hash';
 
 export default {
 
@@ -28,8 +29,7 @@ export default {
             return null;
           }
           // Convert email to lowercase because the email is stored in lowercase, and the password is salted with the email.
-          const saltedPassword = password + email.toLowerCase();
-          const hashedPassword = CryptoJS.SHA256(saltedPassword).toString();
+          const hashedPassword = hashWithSalt(password, email)
 
           if (hashedPassword === user.password) {
             return user;
