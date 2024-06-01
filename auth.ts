@@ -63,6 +63,8 @@ export const {
             ...token.metaData,
           };
         }
+        session.user.email = token.email || "";
+        session.user.name = token.name;
       }
       console.log(session, "Session");
       return session;
