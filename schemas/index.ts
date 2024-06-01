@@ -42,3 +42,10 @@ export const SetNewPasswordSchema = z
   });
 
 // SetNewPasswordSchema.parse({ password: "asdf", confirm: "qwer" });
+
+export const SettingsSchema = z.object({
+  name: z.optional(z.string()),
+  email: z.optional(z.string().email({
+    message: 'Please enter a valid email'
+  })),
+});
