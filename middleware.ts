@@ -9,9 +9,8 @@ import {
 } from "@/routes"
 
 const { auth } = NextAuth(authConfig)
-// NOTE: This fucking import was causing the problem, TF!
-// export const { auth: middleware } = NextAuth(authConfig)
-
+// NOTE: We can add more routes, based on different roles, for example, we can have an admin route, that only allows admin users to access, super admin, etc.
+// TODO: Tf is this error?
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
@@ -32,7 +31,13 @@ export default auth((req) => {
   }
 
   if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL("/login", nextUrl.toString()));
+    let callbackURL = nextUrl.pathname;
+    if (nextUrl.search) {
+      callbackURL += nextUrl.search;
+    }
+    const encodedCallbackURL = encodeURIComponent(callbackURL);
+
+    return Response.redirect(new URL(`/login?${encodedCallbackURL}`, nextUrl.toString()));
   }
   return null;
 });
