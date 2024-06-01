@@ -21,8 +21,9 @@ export default function Home() {
           <div className="text-5xl mb-4">
           </div>
           <h1 className={cn("text-5xl font-bold text-white drop-shadow-xl", poppins.className)}>
-            {process.env.NEXT_PUBLIC_APP_NAME}
+            Welcome to {process.env.NEXT_PUBLIC_APP_NAME}
           </h1>
+          <span className="text-white text-xl pt-4">To get started, please sign in or register</span>
           <div className="text-center flex  flex-col items-center justify-center mt-8 space-y-4">
             <LoginButton asChild>
               <Button variant="secondary" size="lg" className="w-36">
