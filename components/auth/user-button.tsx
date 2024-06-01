@@ -22,14 +22,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link";
 import { FaUser, FaUserAstronaut, FaUserCircle } from "react-icons/fa";
-import { MdDoorBack } from "react-icons/md";
 import { ExitIcon, GearIcon } from "@radix-ui/react-icons";
+import { useCurrentRole } from "@/hooks/use-current-role";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 
 // TODO: Add a user button component that displays the user's name and other needed things and a sign out button
 // TODO: When leaving the user button, the dropdown should close
 const UserButton = () => {
   const user = useCurrentUser();
+  const role = useCurrentRole();
 
   const signOutOnClick = () => {
     logout()
@@ -52,17 +54,25 @@ const UserButton = () => {
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="">
+        <DropdownMenuContent>
           <DropdownMenuLabel>{truncate(user.email ?? '', 16)}</DropdownMenuLabel>
-          <DropdownMenuLabel>{user.role}</DropdownMenuLabel>
+          <DropdownMenuLabel>{role}</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          {role === 'ADMIN' && (
+            <DropdownMenuItem>
+              <MdAdminPanelSettings className="size-[20px] mr-2" />
+              <Link href="/admin">Admin</Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem>
             <FaUserAstronaut className="size-4 mr-2" />
             <Link href="/profile">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <GearIcon className="size-4 mr-2" />
-            <Link href="/settings">Settings</Link>
+            <Link href="/settings">
+              Settings
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={signOutOnClick} className="cursor-pointer">
             <ExitIcon className="size-4 mr-2" />
@@ -71,7 +81,6 @@ const UserButton = () => {
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-
   )
 }
 

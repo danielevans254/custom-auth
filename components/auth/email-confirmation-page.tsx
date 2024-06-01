@@ -44,7 +44,7 @@ const EmailConfirmationForm = () => {
     if (success) {
       const timer = setTimeout(() => {
         router.push('/login');
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [success, router]);
